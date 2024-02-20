@@ -1,15 +1,84 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import "daisyui/dist/full.css";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function AuthModal() {
+  const signupEmailRef = useRef();
+  const signupPasswordRef = useRef();
+  const signupPasswordConfirmRef = useRef();
+  const loginEmailRef = useRef();
+  const loginPasswordRef = useRef();
+  const forgotPasswordEmailRef = useRef();
+  const { signup, login, resetPassword } = useAuth();
+  const [signupError, setSignupError] = useState("");
+  const [signinError, setSigninError] = useState("");
+  const [forgotPasswordError, setForgotPasswordError] = useState("");
+  const [checkEmail, setCheckEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleSignup(e) {
+    e.preventDefault();
+    if (
+      signupPasswordRef.current.value !== signupPasswordConfirmRef.current.value
+    ) {
+      return setSignupError("Passwords do not match");
+    }
+    try {
+      setSignupError("");
+      setLoading(true);
+      await signup(
+        signupEmailRef.current.value,
+        signupPasswordRef.current.value
+      );
+      navigate("/dashboard");
+    } catch {
+      setSignupError("Failed to create an account");
+    }
+
+    setLoading(false);
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    try {
+      setSigninError("");
+      setLoading(true);
+      await login(loginEmailRef.current.value, loginPasswordRef.current.value);
+      navigate("/dashboard");
+    } catch {
+      setSigninError("Failed to Login");
+    }
+
+    setLoading(false);
+  }
+
+  async function handleResetPassword(e) {
+    e.preventDefault();
+    try {
+      setCheckEmail("");
+      setForgotPasswordError("");
+      setLoading(true);
+      await resetPassword(forgotPasswordEmailRef.current.value);
+      setCheckEmail("Check your email for further instructions");
+    } catch {
+      setForgotPasswordError("Failed to reset password");
+    }
+
+    setLoading(false);
+  }
+
   return (
     <>
       <button
         className="btn btn-primary"
-        onClick={() => document.getElementById("my_modal_2").showModal()}
+        onClick={() => document.getElementById("my_modal").showModal()}
       >
-        Get Started
+        Get Started / Login
       </button>
-      <dialog id="my_modal_2" className="modal">
+      <dialog id="my_modal" className="modal">
         <div className="modal-box">
           <div role="tablist" className="tabs tabs-lifted">
             <input
@@ -24,24 +93,8 @@ function AuthModal() {
               className="tab-content bg-base-100 border-base-300 rounded-box p-6"
             >
               <h2 className="text-2xl font-bold mb-10 ">Create an account</h2>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSignup}>
                 <div>
-                  <label className="input input-bordered flex items-center gap-2 mb-5">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 16 16"
-                      fill="currentColor"
-                      className="w-4 h-4 opacity-70"
-                    >
-                      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
-                    </svg>
-                    <input
-                      type="text"
-                      className="grow"
-                      placeholder="Username"
-                      required
-                    />
-                  </label>
                   <label className="input input-bordered flex items-center gap-2 mb-5">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -56,6 +109,7 @@ function AuthModal() {
                       type="text"
                       className="grow"
                       placeholder="Email"
+                      ref={signupEmailRef}
                       required
                     />
                   </label>
@@ -77,6 +131,7 @@ function AuthModal() {
                       type="password"
                       className="grow"
                       placeholder="Password"
+                      ref={signupPasswordRef}
                       required
                     />
                   </label>
@@ -97,22 +152,26 @@ function AuthModal() {
                       type="password"
                       className="grow"
                       placeholder="Confirm Password"
+                      ref={signupPasswordConfirmRef}
                       required
                     />
                   </label>
                 </div>
-                <div className="">
-                  <button className="btn btn-primary w-full mt-4">
-                    Sign Up
-                  </button>
-                </div>
-                <div role="alert" className="alert border-error">
-                  <span className="text-xs opacity-100 text-error">Error!</span>
-                </div>
+                <button
+                  className="btn btn-primary w-full mt-4 mb-2"
+                  type="submit"
+                  disabled={loading}
+                >
+                  Sign Up
+                </button>
+                {signupError && (
+                  <div role="alert" className="alert border-error">
+                    <span className="text-xs opacity-100 text-error">
+                      {signupError}
+                    </span>
+                  </div>
+                )}
               </form>
-              <div className="flex justify-end mt-3">
-                <a className="link link-primary text-xs">Forgot Password?</a>
-              </div>
             </div>
 
             <input
@@ -128,7 +187,7 @@ function AuthModal() {
               className="tab-content bg-base-100 border-base-300 rounded-box p-6"
             >
               <h2 className="text-2xl font-bold mb-10 text-center">LOG IN</h2>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleLogin}>
                 <div>
                   <label className="input input-bordered flex items-center gap-2 mb-5">
                     <svg
@@ -144,6 +203,7 @@ function AuthModal() {
                       type="text"
                       className="grow"
                       placeholder="Email"
+                      ref={loginEmailRef}
                       required
                     />
                   </label>
@@ -165,27 +225,102 @@ function AuthModal() {
                       type="password"
                       className="grow"
                       placeholder="Password"
+                      ref={loginPasswordRef}
                       required
                     />
                   </label>
                 </div>
-                <div className="">
-                  <button className="btn btn-primary w-full mt-4 mb-2">
-                    Log In
-                  </button>
+
+                <button
+                  className="btn btn-primary w-full mt-4 mb-2"
+                  type="submit"
+                  disabled={loading}
+                >
+                  Log In
+                </button>
+                {signinError && (
                   <div role="alert" className="alert border-error">
                     <span className="text-xs opacity-100 text-error">
-                      Error!
+                      {signinError}
                     </span>
                   </div>
-                </div>
+                )}
               </form>
               <div className="flex justify-end mt-3">
-                <a className="link link-primary text-xs">Forgot Password?</a>
+                <button
+                  className="link link-primary text-xs"
+                  onClick={() => setForgotPassword(!forgotPassword)}
+                >
+                  Forgot Password?
+                </button>
               </div>
             </div>
+            {forgotPassword && (
+              <>
+                <input
+                  type="radio"
+                  name="my_tabs_2"
+                  role="tab"
+                  className="tab"
+                  aria-label="Reset Password"
+                />
+                <div
+                  role="tabpanel"
+                  className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                >
+                  <h2 className="text-2xl font-bold mb-10 text-center">
+                    Please Enter Your Email
+                  </h2>
+                  <form className="space-y-4" onSubmit={handleResetPassword}>
+                    <div>
+                      <label className="input input-bordered flex items-center gap-2 mb-5">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          className="w-4 h-4 opacity-70"
+                        >
+                          <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
+                          <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
+                        </svg>
+                        <input
+                          type="text"
+                          className="grow"
+                          placeholder="Email"
+                          ref={forgotPasswordEmailRef}
+                          required
+                        />
+                      </label>
+                    </div>
+
+                    <button
+                      className="btn btn-primary w-full mt-4 mb-2"
+                      type="submit"
+                      disabled={loading}
+                    >
+                      Reset Password
+                    </button>
+                    {forgotPasswordError && (
+                      <div role="alert" className="alert border-error">
+                        <span className="text-xs opacity-100 text-error">
+                          {forgotPasswordError}
+                        </span>
+                      </div>
+                    )}
+                    {checkEmail && (
+                      <div role="alert" className="alert border-success">
+                        <span className="text-xs opacity-100 text-success">
+                          {checkEmail}
+                        </span>
+                      </div>
+                    )}
+                  </form>
+                </div>
+              </>
+            )}
           </div>
         </div>
+
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
         </form>
