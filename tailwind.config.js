@@ -7,24 +7,35 @@ module.exports = {
   daisyui: {
     themes: [
       {
+        // mytheme: {
+        //   primary: "#00d3dd",
+        //   secondary: "#009f00",
+        //   accent: "#00a400",
+        //   neutral: "#332922",
+        //   "base-100": "#12242e",
+        //   info: "#0094ff",
+        //   success: "#abfc00",
+        //   warning: "#ffc600",
+        //   error: "#e6002c",
+        // },
         mytheme: {
-          primary: "#00d3dd",
+          primary: "#00bff5",
 
-          secondary: "#009f00",
+          secondary: "#009300",
 
-          accent: "#00a400",
+          accent: "#00a9b7",
 
-          neutral: "#332922",
+          neutral: "#03231c",
 
-          "base-100": "#12242e",
+          "base-100": "#001012",
 
-          info: "#0094ff",
+          info: "#009dff",
 
-          success: "#abfc00",
+          success: "#009400",
 
-          warning: "#ffc600",
+          warning: "#d15200",
 
-          error: "#e6002c",
+          error: "#d7001a",
         },
       },
     ],
