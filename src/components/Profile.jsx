@@ -61,7 +61,7 @@ export default function Profile() {
     <div className="font-mono static h-dvh text-primary">
       <MainNavbar />
       <div className="container mx-auto h-full py-32">
-        <div className="card h-fit w-auto max-w-xl	 mx-auto border border-primary shadow-xl">
+        <div className="card h-fit w-auto max-w-xl mx-auto border border-primary shadow-xl">
           <div className="card-body">
             <h2 className="card-title ">Profile</h2>
 
@@ -87,9 +87,11 @@ export default function Profile() {
                     </h2>
                     <h2 className="text-lg mb-4">
                       <span className="font-boldy">Income: $ </span>
+                      2000
                     </h2>
                     <h2 className="text-lg mb-4">
                       <span className="font-boldy">Outcome: $ </span>
+                      1000
                     </h2>
                   </div>
                 </div>
@@ -119,6 +121,7 @@ export default function Profile() {
                         <input
                           type="file"
                           className="file-input input-bordered w-full mb-5"
+                          accept="image/*"
                           ref={photoRef}
                         />
                       </label>
