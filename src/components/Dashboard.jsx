@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import MainNavbar from "./MainNavbar";
 import { useAuth } from "../contexts/AuthContext";
+import { useFirestore } from "../contexts/UserContext";
+import TransactionsModal from "./TransactionsModal";
+import GoalsModal from "./GoalsModal";
 
 export default function Dashboard() {
   const [currentDate, setCurrentDate] = useState("");
@@ -17,7 +20,31 @@ export default function Dashboard() {
   }, []);
 
   const { currentUser } = useAuth();
-  const { displayName } = currentUser;
+  const { displayName, uid } = currentUser;
+
+  const { getDocuments, deleteDocument } = useFirestore();
+  const [transactions, setTransactions] = useState([]);
+  const [goals, setGoals] = useState([]);
+
+  useEffect(() => {
+    const getTransactions = async () => {
+      const data = await getDocuments("transactions");
+      setTransactions(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    const getGoals = async () => {
+      const data = await getDocuments("goals");
+      setGoals(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getGoals();
+    getTransactions();
+  }, [goals, transactions]);
+
+  async function handleTransactionDelete(id) {
+    await deleteDocument("transactions", id);
+  }
+  async function handleGoalDelete(id) {
+    await deleteDocument("goals", id);
+  }
 
   return (
     <div className="font-mono static h-dvh">
@@ -28,7 +55,7 @@ export default function Dashboard() {
           <h2 className="text-sm opacity-70">{currentDate}</h2>
         </div>
         <div className="flex justify-center">
-          <div className="grid grid-cols-4 grid-rows-3 gap-4 w-full">
+          <div className="grid grid-cols-5 grid-rows-3 gap-4 w-full">
             <div className="col-span-1 row-span-1 border-primary border rounded-lg h-56 p-4">
               <div className="flex flex-col justify-center">
                 <h2 className="text-xl">Income:</h2>
@@ -51,57 +78,76 @@ export default function Dashboard() {
                 <h2 className="text-4xl text-error self-center mt-12">$1000</h2>
               </div>
             </div>
-            <div className="col-span-1 row-span-3 border-primary border rounded-lg p-4">
+            <div className="col-span-2 row-span-3 border-primary border rounded-lg p-4">
               <div className="flex justify-between">
                 <h2 className="text-xl">Financial Goals</h2>
-                <button
-                  className="btn btn-ghost btn-circle text-lg btn-sm"
-                  onClick={() =>
-                    document.getElementById("my_modal_4").showModal()
-                  }
-                >
-                  +
-                </button>
-                <dialog id="my_modal_4" className="modal">
-                  <div className="modal-box">
-                    <form method="dialog">
-                      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                        ✕
-                      </button>
-                    </form>
-                    <h3 className="font-bold text-lg">Hello!</h3>
-                    <p className="py-4">
-                      Press ESC key or click on ✕ button to close
-                    </p>
-                  </div>
-                </dialog>
+                <GoalsModal />
+              </div>
+              <div className="flex flex-col">
+                <div className="grid grid-cols-4 grid-rows-auto text-center border-b border-primary py-2 mb-4">
+                  <h2>Name</h2>
+                  <h2>Date</h2>
+                  <h2>Amount</h2>
+                </div>
+                {goals.map(
+                  (goal) =>
+                    goal.userId === uid && (
+                      <div
+                        key={goal.id}
+                        className="grid grid-cols-4 grid-rows-auto text-center border-b border-primary py-2"
+                      >
+                        <h2>{goal.name}</h2>
+                        <h2>{goal.date}</h2>
+                        <h2>{goal.amount}</h2>
+                        <div className="text-sm">
+                          <button
+                            onClick={() => {
+                              handleGoalDelete(goal.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    )
+                )}
               </div>
             </div>
             <div className="col-span-3 row-span-2 border-primary border rounded-lg p-4">
               <div className="flex justify-between">
                 <h2 className="text-xl">Latest Transactions</h2>
-                <button
-                  className="btn btn-ghost btn-circle text-lg btn-sm"
-                  onClick={() =>
-                    document.getElementById("my_modal_3").showModal()
-                  }
-                >
-                  +
-                </button>
-                <dialog id="my_modal_3" className="modal">
-                  <div className="modal-box">
-                    <form method="dialog">
-                      {/* if there is a button in form, it will close the modal */}
-                      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                        ✕
-                      </button>
-                    </form>
-                    <h3 className="font-bold text-lg">Hello!</h3>
-                    <p className="py-4">
-                      Press ESC key or click on ✕ button to close
-                    </p>
-                  </div>
-                </dialog>
+                <TransactionsModal />
+              </div>
+              <div className="flex flex-col">
+                <div className="grid grid-cols-5 grid-rows-auto text-center border-b border-primary py-2 mb-4">
+                  <h2>Type</h2>
+                  <h2>Name</h2>
+                  <h2>Date</h2>
+                  <h2>Amount</h2>
+                </div>
+                {transactions.map(
+                  (transaction) =>
+                    transaction.userId === uid && (
+                      <div
+                        key={transaction.id}
+                        className="grid grid-cols-5 grid-rows-auto text-center border-b border-primary py-2"
+                      >
+                        <h2>{transaction.type}</h2>
+                        <h2>{transaction.name}</h2>
+                        <h2>{transaction.date}</h2>
+                        <h2>{transaction.amount}</h2>
+                        <div className="text-sm">
+                          <button
+                            onClick={() => {
+                              handleTransactionDelete(transaction.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    )
+                )}
               </div>
             </div>
           </div>

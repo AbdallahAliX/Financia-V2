@@ -1,0 +1,85 @@
+import React, { useRef, useState } from "react";
+import { useFirestore } from "../contexts/UserContext";
+import { useAuth } from "../contexts/AuthContext";
+
+export default function GoalsModal() {
+  const { currentUser } = useAuth();
+  const { addDocument } = useFirestore();
+  const { uid } = currentUser;
+  const nameRef = useRef();
+  const dateRef = useRef();
+  const amountRef = useRef();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const newGoal = {
+      name: nameRef.current.value,
+      date: dateRef.current.value,
+      amount: amountRef.current.value,
+      userId: uid,
+    };
+    await addDocument("goals", newGoal);
+  }
+
+  return (
+    <div>
+      <button
+        className="btn btn-ghost btn-circle text-lg btn-sm"
+        onClick={() => document.getElementById("my_modal_3").showModal()}
+      >
+        +
+      </button>
+      <dialog id="my_modal_3" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <form onSubmit={handleSubmit}>
+            <label className="form-control w-full max-w-xs mb-4">
+              <div className="label">
+                <span className="label-text">Add a goal</span>
+              </div>
+              <input
+                type="text"
+                className="input input-bordered"
+                placeholder="Transaction name"
+                ref={nameRef}
+              />
+            </label>
+            <label className="form-control w-full max-w-xs mb-4">
+              <div className="label">
+                <span className="label-text">Add Goal Deadline</span>
+              </div>
+              <input
+                type="date"
+                className="input input-bordered"
+                placeholder="Transaction Date"
+                ref={dateRef}
+              />
+            </label>
+            <label className="form-control w-full max-w-xs mb-8">
+              <div className="label">
+                <span className="label-text">Add total amount to be saved</span>
+              </div>
+              <input
+                type="number"
+                className="input input-bordered"
+                placeholder="Transaction Amount"
+                ref={amountRef}
+              />
+            </label>
+            <button
+              type="submit"
+              className="btn btn-primary w-full max-w-full"
+              onClick={() => document.getElementById("my_modal_3").close()}
+            >
+              Add Goal
+            </button>
+          </form>
+        </div>
+      </dialog>
+    </div>
+  );
+}

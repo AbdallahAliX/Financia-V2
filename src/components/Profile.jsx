@@ -19,7 +19,7 @@ export default function Profile() {
     updateProfileDisplayName,
     updateProfilePhotoUrl,
   } = useAuth();
-  const { email, displayName, photoURL } = currentUser;
+  const { email, displayName, photoURL, uid } = currentUser;
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -48,7 +48,7 @@ export default function Profile() {
     }
     Promise.all(promises)
       .then(() => {
-        navigate("/dashboard");
+        // navigate("/dashboard");
       })
       .catch(() => {
         setError("Failed to update account");
@@ -74,25 +74,19 @@ export default function Profile() {
                 </div>
                 <div className="space-y-4">
                   <h2 className="text-xl font-bold mt-4 mb-10 ">
-                    Account's Info
+                    Account's Info <br />
+                    <span className="opacity-50 text-sm">ID: {uid}</span>
                   </h2>
-                  <div className="">
+                  <div>
                     <h2 className="text-lg mb-4 ">
                       <span className="font-bold ">Username: </span>
                       {displayName}
                     </h2>
                     <h2 className="text-lg mb-4">
-                      <span className="font-boldy">Email: </span>
+                      <span className="font-bold">Email: </span>
                       {email}
                     </h2>
-                    <h2 className="text-lg mb-4">
-                      <span className="font-boldy">Income: $ </span>
-                      2000
-                    </h2>
-                    <h2 className="text-lg mb-4">
-                      <span className="font-boldy">Outcome: $ </span>
-                      1000
-                    </h2>
+                    <h2 className="text-lg mb-4"></h2>
                   </div>
                 </div>
               </div>
@@ -206,6 +200,9 @@ export default function Profile() {
                       className="btn btn-primary w-full mt-4 mb-2"
                       type="submit"
                       disabled={loading}
+                      onClick={() =>
+                        document.getElementById("my_modal_2").close()
+                      }
                     >
                       Confirm
                     </button>

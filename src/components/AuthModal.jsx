@@ -10,7 +10,7 @@ function AuthModal() {
   const loginEmailRef = useRef();
   const loginPasswordRef = useRef();
   const forgotPasswordEmailRef = useRef();
-  const { signup, login, resetPassword } = useAuth();
+  const { signup, login, resetPassword, currentUser } = useAuth();
   const [signupError, setSignupError] = useState("");
   const [signinError, setSigninError] = useState("");
   const [forgotPasswordError, setForgotPasswordError] = useState("");
@@ -75,6 +75,7 @@ function AuthModal() {
       <button
         className="btn btn-primary"
         onClick={() => document.getElementById("my_modal").showModal()}
+        disabled={currentUser}
       >
         Get Started / Login
       </button>

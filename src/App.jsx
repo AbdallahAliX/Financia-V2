@@ -2,6 +2,7 @@ import React from "react";
 import "daisyui/dist/full.css";
 import LandingPage from "./components/LandingPage";
 import { AuthProvider } from "./contexts/AuthContext";
+import { UserProvider } from "./contexts/UserContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
@@ -24,7 +25,9 @@ function App() {
             path="/dashboard"
             element={
               <PrivateRoute>
-                <Dashboard />
+                <UserProvider>
+                  <Dashboard />
+                </UserProvider>
               </PrivateRoute>
             }
           ></Route>
