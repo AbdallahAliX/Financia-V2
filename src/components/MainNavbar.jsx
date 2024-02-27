@@ -40,7 +40,7 @@ export default function MainNavbar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-6 z-[1] p-2 shadow border border-primary rounded-box w-52 text-primary"
+            className="menu menu-sm dropdown-content mt-6 z-[1] p-2 shadow border border-primary bg-primary rounded-box w-52 text-black"
           >
             <li>
               <Link to="/dashboard">

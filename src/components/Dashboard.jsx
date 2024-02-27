@@ -98,12 +98,13 @@ export default function Dashboard() {
                       >
                         <h2>{goal.name}</h2>
                         <h2>{goal.date}</h2>
-                        <h2>{goal.amount}</h2>
+                        <h2 className="text-warning">{goal.amount}</h2>
                         <div className="text-sm">
                           <button
                             onClick={() => {
                               handleGoalDelete(goal.id);
                             }}
+                            className="btn btn-xs btn-error border-error border rounded-md"
                           >
                             Delete
                           </button>
@@ -135,12 +136,13 @@ export default function Dashboard() {
                         <h2>{transaction.type}</h2>
                         <h2>{transaction.name}</h2>
                         <h2>{transaction.date}</h2>
-                        <h2>{transaction.amount}</h2>
+                        <h2 className="text-error">{transaction.amount}</h2>
                         <div className="text-sm">
                           <button
                             onClick={() => {
                               handleTransactionDelete(transaction.id);
                             }}
+                            className="btn btn-xs btn-error border-error border rounded-md"
                           >
                             Delete
                           </button>
