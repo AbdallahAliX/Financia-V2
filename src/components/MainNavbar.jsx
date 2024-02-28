@@ -35,7 +35,20 @@ export default function MainNavbar() {
             className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full shadow-xl">
-              <img alt="Tailwind CSS Navbar component" src={photoURL} />
+              {/* <img alt="Tailwind CSS Navbar component" src={photoURL} /> */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="inline-block p-2 stroke-current text-primary"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
             </div>
           </div>
           <ul

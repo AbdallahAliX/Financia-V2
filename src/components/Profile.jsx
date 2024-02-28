@@ -41,11 +41,11 @@ export default function Profile() {
     if (usernameRef.current.value) {
       promises.push(updateProfileDisplayName(usernameRef.current.value));
     }
-    if (photoRef.current.files[0]) {
-      promises.push(
-        updateProfilePhotoUrl(URL.createObjectURL(photoRef.current.files[0]))
-      );
-    }
+    // if (photoRef.current.files[0]) {
+    //   promises.push(
+    //     updateProfilePhotoUrl(URL.createObjectURL(photoRef.current.files[0]))
+    //   );
+    // }
     Promise.all(promises)
       .then(() => {
         // navigate("/dashboard");
@@ -67,11 +67,11 @@ export default function Profile() {
 
             <div className="card w-full h-full">
               <div className="card-body">
-                <div className="avatar">
+                {/* <div className="avatar">
                   <div className="w-24 rounded-full outline outline-primary">
                     <img src={photoURL} />
                   </div>
-                </div>
+                </div> */}
                 <div className="space-y-4">
                   <h2 className="text-xl font-bold mt-4 mb-10 ">
                     Account's Info <br />
@@ -108,7 +108,7 @@ export default function Profile() {
                   </h3>
                   <form className="space-y-4" onSubmit={handleSubmit}>
                     <div>
-                      <label>
+                      {/* <label>
                         <h2 className="text-sm font-bold mb-2">
                           Profile Photo
                         </h2>
@@ -118,7 +118,7 @@ export default function Profile() {
                           accept="image/*"
                           ref={photoRef}
                         />
-                      </label>
+                      </label> */}
 
                       <label className="input input-bordered flex items-center gap-2 mb-5">
                         <svg
