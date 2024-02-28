@@ -37,7 +37,7 @@ export default function Dashboard() {
     };
     getGoals();
     getTransactions();
-  }, [goals, transactions]);
+  }, []);
 
   async function handleTransactionDelete(id) {
     await deleteDocument("transactions", id);
