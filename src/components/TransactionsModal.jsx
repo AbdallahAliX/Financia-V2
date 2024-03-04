@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function TransactionsModal() {
   const { currentUser } = useAuth();
-  const { addDocument } = useFirestore();
+  const { addDocument, getTransactions } = useFirestore();
   const { uid } = currentUser;
   const typeRef = useRef();
   const nameRef = useRef();
@@ -21,6 +21,7 @@ export default function TransactionsModal() {
       userId: uid,
     };
     await addDocument("transactions", newTransaction);
+    getTransactions();
   }
 
   return (
@@ -47,10 +48,8 @@ export default function TransactionsModal() {
                 <option disabled selected>
                   Choose transaction type...
                 </option>
-                <option>Rent/Mortage</option>
-                <option>Subscription</option>
-                <option>Fees</option>
-                <option>Fun(Entertainment)</option>
+                <option>Income</option>
+                <option>Expense</option>
               </select>
             </label>
             <label className="form-control w-full max-w-xs mb-4">

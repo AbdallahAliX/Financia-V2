@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function GoalsModal() {
   const { currentUser } = useAuth();
-  const { addDocument } = useFirestore();
+  const { addDocument, getGoals } = useFirestore();
   const { uid } = currentUser;
   const nameRef = useRef();
   const dateRef = useRef();
@@ -19,6 +19,7 @@ export default function GoalsModal() {
       userId: uid,
     };
     await addDocument("goals", newGoal);
+    getGoals();
   }
 
   return (
@@ -44,18 +45,20 @@ export default function GoalsModal() {
               <input
                 type="text"
                 className="input input-bordered"
-                placeholder="Transaction name"
+                placeholder="Goal name"
                 ref={nameRef}
               />
             </label>
             <label className="form-control w-full max-w-xs mb-4">
               <div className="label">
-                <span className="label-text">Add Goal Deadline</span>
+                <span className="label-text">
+                  When do you want it to be acheived ?
+                </span>
               </div>
               <input
                 type="date"
                 className="input input-bordered"
-                placeholder="Transaction Date"
+                placeholder="Goal Deadline"
                 ref={dateRef}
               />
             </label>
@@ -66,7 +69,7 @@ export default function GoalsModal() {
               <input
                 type="number"
                 className="input input-bordered"
-                placeholder="Transaction Amount"
+                placeholder="Amount to be saved"
                 ref={amountRef}
               />
             </label>

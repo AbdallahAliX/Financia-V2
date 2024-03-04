@@ -8,6 +8,18 @@ export function useFirestore() {
 }
 
 export function UserProvider({ children }) {
+  const [transactions, setTransactions] = useState([]);
+  const [goals, setGoals] = useState([]);
+
+  const getTransactions = async () => {
+    const data = await getDocuments("transactions");
+    setTransactions(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+  const getGoals = async () => {
+    const data = await getDocuments("goals");
+    setGoals(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   function addDocument(collection, data) {
     return db.collection(collection).add(data);
   }
@@ -34,6 +46,10 @@ export function UserProvider({ children }) {
     getDocuments,
     updateDocument,
     deleteDocument,
+    getTransactions,
+    getGoals,
+    transactions,
+    goals,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
