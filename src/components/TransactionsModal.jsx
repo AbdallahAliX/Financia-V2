@@ -44,7 +44,7 @@ export default function TransactionsModal() {
               <div className="label">
                 <span className="label-text">transaction Type</span>
               </div>
-              <select className="select select-bordered" ref={typeRef}>
+              <select className="select select-bordered" ref={typeRef} required>
                 <option disabled selected>
                   Choose transaction type...
                 </option>
@@ -61,6 +61,7 @@ export default function TransactionsModal() {
                 className="input input-bordered"
                 placeholder="Transaction name"
                 ref={nameRef}
+                required
               />
             </label>
             <label className="form-control w-full max-w-xs mb-4">
@@ -72,6 +73,7 @@ export default function TransactionsModal() {
                 className="input input-bordered"
                 placeholder="Transaction Date"
                 ref={dateRef}
+                required
               />
             </label>
             <label className="form-control w-full max-w-xs mb-8">
@@ -83,6 +85,7 @@ export default function TransactionsModal() {
                 className="input input-bordered"
                 placeholder="Transaction Amount"
                 ref={amountRef}
+                required
               />
             </label>
             <button

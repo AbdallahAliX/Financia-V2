@@ -47,6 +47,7 @@ export default function GoalsModal() {
                 className="input input-bordered"
                 placeholder="Goal name"
                 ref={nameRef}
+                required
               />
             </label>
             <label className="form-control w-full max-w-xs mb-4">
@@ -60,6 +61,7 @@ export default function GoalsModal() {
                 className="input input-bordered"
                 placeholder="Goal Deadline"
                 ref={dateRef}
+                required
               />
             </label>
             <label className="form-control w-full max-w-xs mb-8">
@@ -71,6 +73,7 @@ export default function GoalsModal() {
                 className="input input-bordered"
                 placeholder="Amount to be saved"
                 ref={amountRef}
+                required
               />
             </label>
             <button
